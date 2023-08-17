@@ -50,7 +50,23 @@ public class SocksService {
             existingSocks.setQuantity(existingSocks.getQuantity()+socks.getQuantity());
             socksRepository.save(existingSocks);
         }
-
     }
 
+    public void outcome(Socks socks){
+        if(socks.getQuantity()<=0){
+            throw new InvalidValuesException("Quantity value must be a positive number");
+        }
+        if(socks.getCottonPart()<0 || socks.getCottonPart()>100){
+            throw new InvalidValuesException("cottonPart value must be between 0 and 100");
+        }
+        if(socksRepository.findSocksByColorAndCottonPart(socks.getColor(), socks.getCottonPart()).isEmpty()){
+            throw new InvalidValuesException("Socks with such parameters were not found");
+        }
+        Socks existingSocks = socksRepository.findSocksByColorAndCottonPart(socks.getColor(), socks.getCottonPart()).get(0);
+        if(existingSocks.getQuantity()<socks.getQuantity()){
+            throw new InvalidValuesException("Too much socks for the outcome");
+        }
+        existingSocks.setQuantity(existingSocks.getQuantity()-socks.getQuantity());
+        socksRepository.save(existingSocks);
+    }
 }

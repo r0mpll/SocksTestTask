@@ -28,5 +28,10 @@ public class SocksController {
         socksService.income(socks);
         return new ResponseEntity<>("Socks were added",HttpStatus.OK);
     }
+    @PostMapping("outcome")
+    public ResponseEntity<String> setOutcome(@RequestBody Socks socks){
+        socksService.outcome(socks);
+        return new ResponseEntity<>("Socks were removed",HttpStatus.OK);
+    }
 
 }
