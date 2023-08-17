@@ -1,5 +1,6 @@
 package com.example.sockstesttask.services;
 
+import com.example.sockstesttask.exceptions.InvalidValuesException;
 import com.example.sockstesttask.exceptions.UnknownOperationException;
 import com.example.sockstesttask.entities.Socks;
 import com.example.sockstesttask.repositories.SocksRepository;
@@ -33,6 +34,23 @@ public class SocksService {
             default:
                 throw new UnknownOperationException("Unknown operation: "+operation);
         }
+    }
+
+    public void income(Socks socks){
+        if(socks.getQuantity()<=0){
+            throw new InvalidValuesException("Quantity value must be a positive number");
+        }
+        if(socks.getCottonPart()<0 || socks.getCottonPart()>100){
+            throw new InvalidValuesException("cottonPart value must be between 0 and 100");
+        }
+        if(socksRepository.findSocksByColorAndCottonPart(socks.getColor(), socks.getCottonPart()).isEmpty()){
+            socksRepository.save(socks);
+        } else{
+            Socks existingSocks = socksRepository.findSocksByColorAndCottonPart(socks.getColor(), socks.getCottonPart()).get(0);
+            existingSocks.setQuantity(existingSocks.getQuantity()+socks.getQuantity());
+            socksRepository.save(existingSocks);
+        }
+
     }
 
 }

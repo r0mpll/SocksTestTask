@@ -1,20 +1,14 @@
 package com.example.sockstesttask.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Socks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String color;
-
     private Long quantity;
-
     private Short cottonPart;
 
     public Socks(String color, Long quantity, Short cottonPart) {
